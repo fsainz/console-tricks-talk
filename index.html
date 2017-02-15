@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Console Tricks & Entwickler Shortcuts</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/railscasts.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+    <style>
+      .hljs{
+        background: #011c23;
+      }
+
+      /*@import url(../../lib/font/source-sans-pro/source-sans-pro.css);*/
+
+      .reveal h1 {
+        font-size: 2.5em;
+      }
+      .reveal h2 {
+        font-size: 1.6em;
+      }
+      .reveal h3 {
+        font-size: 1.3em;
+      }
+      .reveal h4 {
+        font-size: 1.0em;
+      }
+    </style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1 style='position:relative'>Console Tricks</h1>
+          <div style='opacity: 0.5; margin: -50px 0 -30px; font-size: 2em; font-family: "League Gothic"'>&</div>
+          <h1>Entwickler Shortcuts<div class='emoji' style='font-size:80%;position:absolute; bottom:50px; right: 70px'>⚡</div></h1>
+				</section>
+
+				<section data-background-color="rgb(222, 222, 221)">
+				   <img data-src="img/pry_logo.png" style="background:none; border:none; box-shadow:none">
+				</section>
+
+        <section>
+           <p><em>... wie war es nochmal?</em></p>
+           <img data-src="img/futurama-professor-farnsworth.jpg">
+        </section>
+
+<!-- HISTORY ---------------------------------------------------------------------------------------->
+        <section>
+          <section>
+            <h1>Verlauf <img data-src="img/history.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+          </section>
+
+          <section>
+            <h3>fuzzy finder</h3>
+            <a href="https://github.com/junegunn/fzf" target="_blank">https://github.com/junegunn/fzf</a>
+            <img data-src="img/fuzzy.gif">
+          </section>
+
+          <section>
+            <h3>history</h3>
+            <pre><code class="hljs" data-trim contenteditable>
+hist (history)
+hist --all (-a)
+hist -T (--tail) 20
+hist -G (--grep) (REGEX)
+hist -r (--replay) 14..16
+hist -n (--no-numbers)
+
+# "hh", "hist -a -T30"
+# "hn", "hist -a -T30 -n"
+# "hg", "hist -a -G"
+# "hr", "hist -a -r"
+# CTRL + R
+            </code></pre>
+          </section>
+        </section>
+
+
+<!-- COPY ---------------------------------------------------------------------------------------->
+        <section>
+          <section>
+            <h1>Copy/Paste <img data-src="img/clipboard.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+          </section>
+          <section>
+            <h3>Verkleinerung der Schriftgröße</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td style='width: 50%; vertical-align: top'><img data-src="img/long-output-0.png"></td>
+                  <td style='width: 50%; vertical-align: top'><img data-src="img/long-output-2.png"></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </section>
+
+          <section>
+            <h3>pbcopy / pbpaste</h3>
+            <pre><code class="hljs" data-trim contenteditable>
+foo = '123'
+`echo #{foo} | pbcopy`
+`echo #{ISO3166::Country.all} | pbcopy` ❌
+IO.popen('pbcopy', 'w') { |f| f << ISO3166::Country.all }
+
+bar = `pbpaste`
+            </code></pre>
+          </section>
+          <section>
+            <h3>Pry-Clipboard</h3>
+            <pre><code class="hljs" data-trim contenteditable>
+# gem 'pry-clipboard'
+
+Clipboard.copy Array.methods
+foo = Clipboard.paste
+
+# "cc", "copy-history -T -2 -l" # input und output
+            </code></pre>
+          </section>
+
+          <section>
+            <table>
+              <thead>
+                <tr>
+                  <th>sublime</th>
+                  <th>copy-clip</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style='vertical-align: top'><img data-src="img/sublime_clipboard.png"></td>
+                  <td><img data-src="img/copy_clip.png"></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </section>
+
+
+<!-- OUTPUT ---------------------------------------------------------------------------------------->
+
+        <section>
+          <section>
+            <h1>Output <img data-src="img/sign-out.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+          </section>
+          <section>
+            <h3>Darstellungsmöglichkeiten</h3>
+            <ul>
+              <li><code>puts #foo.to_s</code></li>
+              <li><code>p #foo.inspect</code></li>
+              <li><code>pp # pretty print</code></li>
+              <li><code>j/jj # pretty json</code></li>
+            </ul>
+          </section>
+          <section>
+            <h3>Tabellarische Daten</h3>
+            <pre><code class="ruby hljs" data-trim contenteditable>
+_table Question.limit(5), fields: %i(id questionnaire_id text)
+
++----+------------------+-------------------------------------+
+| id | questionnaire_id | text                                |
++----+------------------+-------------------------------------+
+| 1  | 6                | Iste sint a cumque consectetur.     |
+| 2  | 7                | Omnis animi ea architecto reicie    |
+| 3  | 8                | Facere ut nihil nisi eaque praes... |
+| 4  | 9                | Eum et incidunt veritatis ut.       |
+| 5  | 10               | Non voluptatem praesentium sint ... |
++----+------------------+-------------------------------------+
+
+_table [['foo', 'bar', 'baz'], [1,2,3], [4,5,6]]
+_table [{foo: '1', bar: '2'}, {foo: '3', bar: '4'}]
+_table (1..3).map {|i| i.days.from_now }, :fields=>[:to_s, :year, :month, :day]
+            </code></pre>
+          </section>
+          <section>
+            <h3>Inspektoren</h3>
+            <pre><code class="hljs" data-trim contenteditable>
+list-inspectors
+change-inspector # default, simple, clipped
+
+# custom: awesome, hirb, special_cases
+            </code></pre>
+          </section>
+          <section>
+            <h3>Inspektoren - Sonderfälle</h3>
+            <pre><code class="hljs" data-trim contenteditable>
+Pry::Inspector::MAP['default_with_special_cases'] = {
+  description: 'provides extra info for some models',
+  value: proc do |output, value, _pry_|
+    case value
+    when User
+      puts "\e[34m #{ value.role } #{ value.email } \e[0m\n -------- \n"
+    end
+    Pry::DEFAULT_PRINT.call(output, value, _pry_)
+  end
+}
+            </code></pre>
+          </section>
+        </section>
+
+<!-- Prompts ---------------------------------------------------------------------------------------->
+        <section>
+          <section>
+            <h1>Prompt <img data-src="img/angle-double-right.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+          </section>
+          <section>
+            <h3>prompts</h3>
+            <pre><code class="ruby hljs" data-trim contenteditable>
+list-prompts
+change-prompt # simple, nav, none
+
+# custom: rails_app, memory
+            </code></pre>
+          </section>
+          <section>
+            <h3>Umgebung Prompt</h3>
+            <img data-src="img/rails_prompt.png" />
+          </section>
+          <section>
+            <h3>Arbeitsspeicher Prompt</h3>
+            <img data-src="img/memory_prompt.png" />
+          </section>
+        </section>
+
+<!-- Colors ---------------------------------------------------------------------------------------->
+      <section>
+        <section>
+          <h1><span style='color: #e6e62d'>Farben</span> <img data-src="img/paint-brush.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+        </section>
+         <section>
+            <h3>Farbcodes</h3>
+            <small><a href='http://stackoverflow.com/questions/1489183/colorized-ruby-output' target='_blank'>http://stackoverflow.com/questions/1489183/colorized-ruby-output</a></small>
+            <img data-src="img/colors.png" style='max-height: 50vh'>
+          </section>
+          <section>
+            <h3>Warnungen</h3>
+            <pre class="hljs" data-trim contenteditable>
+<span>be</span> rails c
+<span style='color:red'>The meta-request gem can cause a SystemStackError: stack level
+too deep when saving a shop record.
+See
+  https://github.com/rgeo/activerecord-postgis-adapter/issues/81</span>
+Loading development environment (Rails 4.2.6)
+            </pre>
+          </section>
+        </section>
+
+<!-- Emoji ---------------------------------------------------------------------------------------->
+      <section>
+        <section>
+          <h1>Emoji! <span class='emoji'>🦄</span></h1>
+        </section>
+        <section data-background-image='img/emoji.png'>
+        </section>
+        <section data-background-image='img/gravity-falls-gnome-rainbow.png'>
+        </section>
+      </section>
+
+<!-- Debugging ---------------------------------------------------------------------------------------->
+      <section>
+        <section>
+          <h1>Debugging <img data-src="img/bug.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+        </section>
+      <section>
+          <h3>Erkunden</h3>
+          <pre><code class="ruby hljs" data-trim contenteditable>
+show-source
+ls
+cd
+find-method
+Foo._tab_autovervollstaendigung</span>
+
+edit -p Foo # $EDITOR
+          </code></pre>
+        </section>
+
+      <section>
+        <h3>docs / modelle</h3>
+        <pre><code class="ruby" data-trim contenteditable>
+# gem 'pry-doc'
+? Array#reduce (alias show-doc)
+
+show-middleware
+show-model
+show-models
+show-routes
+        </code></pre>
+      </section>
+
+      <section>
+        <code>binding.pry</code>
+        <pre><code class="ruby hljs" data-trim contenteditable>
+whereami
+caller
+
+# gem 'pry-byebug'
+# break, step, next, finish, continue
+# backtrace, up, down, frame
+        </code></pre>
+      </section>
+
+      <section>
+        <h3>better errors</h3>
+        <img data-src="img/better_errors.png">
+      </section>
+    </section>
+
+
+<!-- Waiting ---------------------------------------------------------------------------------------->
+
+      <section>
+        <section>
+          <h1>Warten <img data-src="img/ellipsis-h.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+        </section>
+      <section>
+        <h3>Benachrichtigungen nach langen Prozessen</h3>
+        <pre><code class="ruby" data-trim contenteditable>
+# gem 'terminal-notifier'
+
+def ping_when_finished(&block)
+  block.call if block_given?
+  `say fertig`
+  `terminal-notifier -message "finished" -sound default -timeout 5`
+end
+        </code></pre>
+      </section>
+      <section>
+          <h3>tqdm</h3>
+          <small><a href='https://github.com/powerpak/tqdm-ruby' target='_blank'>https://github.com/powerpak/tqdm-ruby</a></small>
+          <img data-src="img/tqdm.gif" />
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Konfiguration <img data-src="img/cog.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+        </section>
+        <section>
+           <h3>.pryrc</h3>
+           <ul>
+             <li class='fragment'>isolieren</li>
+             <li class='fragment'>eingebautes Cheatsheet</li>
+           </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1 style='font-size:4em'>Abkürzungen <img data-src="img/rocket.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h1>
+        </section>
+
+        <section>
+          <h3>Find My Dev <img data-src="img/search.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h3>
+          <pre><code class="hljs" data-trim contenteditable>
+module FindMyDev
+  def fer
+    self.find_by(first_name: "Fernando", last_name: "Sainz")
+  end
+
+  def important_client
+    # ....
+  end
+end
+
+User.extend(FindMyDev) if Rails.env.development?
+          </code></pre>
+        </section>
+        <section>
+          <h3>Find My Dev <img data-src="img/search.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h3>
+          <pre><code class="hljs" data-trim contenteditable>
+          User.fer
+          City.bonn
+          Company.haribo
+          # ...
+          </code></pre>
+        </section>
+
+      <section>
+          <h3>Dev Tools Leiste <img data-src="img/share-square-o.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h3>
+          <img data-src="img/dev1.png">
+          <img data-src="img/dev2.png">
+          <img data-src="img/dev3.png">
+        </section>
+
+      <section>
+          <h3>Dev Tools Leiste <img data-src="img/share-square-o.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h3>
+          <ul>
+            <li>Routes</li>
+            <li>Emails</li>
+            <li>Sidekiq</li>
+            <li>Styles</li>
+            <li>Sprachenschalter</li>
+            <li>Impersonieren / Role Switch</li>
+            <li>Zeitreisen</li>
+          </ul>
+        </section>
+
+
+        <section data-background-image='img/time_travel.jpg'>
+        </section>
+
+        <section>
+          <section>
+            <h3>1 click Setup <img data-src="img/magic.svg" style="background:none; border:none; box-shadow:none; max-height: 1em;"></h3>
+            <img data-src="img/1-click.png"  style='max-height: 50vh'>
+          </section>
+        </section>
+      </section>
+      <section>
+        <h1>Danke!</h1>
+        <br/>
+        <p style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;">
+          <strong style='color:rgb(238, 232, 213)'>Fernando Sainz</strong>
+          &nbsp;&nbsp;
+          fsainz.com
+        </p>
+      </section>
+			</div>
+		</div>
+
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
